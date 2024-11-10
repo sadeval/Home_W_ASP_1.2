@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Спасибо за отправку</title>
+</head>
+<body>
+    <h1>Спасибо за отправку!</h1>
+    <p>Вот ваши отправленные сообщения:</p>
+    <ul id="messagesList"></ul>
+    <a href="/">Отправить еще одно сообщение</a>
+
+    <script>async function fetchMessages() {
+            try {
+                const response = await fetch('/api/data/messages');
+                if (response.ok) {
+                    const messages = await response.json();
+                    const list = document.getElementById('messagesList');
+                    messages.forEach(msg => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = msg;
+                        list.appendChild(listItem);
+                    });
+                } else {
+                    const text = await response.text();
+                    alert(text);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при загрузке сообщений.');
+            }
+        }
+
+        fetchMessages();</script>
+</body>
+</html>

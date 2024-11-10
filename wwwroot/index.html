@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отправка Данных</title>
+</head>
+<body>
+    <h1>Отправьте Сообщение</h1>
+    <form id="dataForm">
+        <label for="message">Сообщение:</label><br>
+        <input type="text" id="message" name="message" required><br><br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <script>document.getElementById('dataForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); 
+
+            const message = document.getElementById('message').value;
+
+            try {
+                const response = await fetch('/api/data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url; 
+                } else {
+                    const text = await response.text();
+                    alert(text);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке данных.');
+            }
+        });</script>
+</body>
+</html>
